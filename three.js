@@ -4,7 +4,7 @@ import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Group, Easing, Tween } from '@tweenjs/tween.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { text } from 'framer-motion/client';
+
 
 
 // Initialize Three.js Scene
@@ -33,12 +33,12 @@ scene.fog = new THREE.Fog('#000000', 15, 18); // #232323
 // Environment Setup
 const rgbeLoader = new RGBELoader();
 rgbeLoader.load('envs/qwantani_dusk_2_puresky_1k.hdr', (texture) => {
-  texture.magFilter = THREE.LinearFilter;
-  texture.minFilter = THREE.LinearMipmapLinearFilter;
-  texture.mapping = THREE.EquirectangularReflectionMapping;
-  texture.colorSpace = THREE.SRGBColorSpace;
-  scene.environment = texture;
-  scene.background = new THREE.Color(0x000000); // keep black bg
+    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    scene.environment = texture;
+    scene.background = new THREE.Color(0x000000); // keep black bg
 });
 
 
@@ -60,7 +60,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 
 // Orbit control Setup
-const controls = new OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls(camera, renderer.domElement);
 // controls.enabled = false;
 // const Flycontrols = new FlyControls(camera, renderer.domElement);
 let useFly = false;
@@ -127,7 +127,7 @@ var currentAction;
 
 // Define how far everything should travel
 const zStart = 0;     // starting Z
-const zEnd   = -10;   // deep in fog
+const zEnd = -10;   // deep in fog
 
 let scrollProgress = 0;
 const scrollObjects = []; // everything that should move into fog
@@ -138,8 +138,8 @@ const loadingText = document.getElementById('loading-text');
 
 // Progress updates
 manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-  const percent = Math.round((itemsLoaded / itemsTotal) * 100);
-  loadingText.textContent = `Loading... ${percent}%`;
+    const percent = Math.round((itemsLoaded / itemsTotal) * 100);
+    loadingText.textContent = `Loading... ${percent}%`;
 };
 
 // 4. set the spans with the queried HTML DOM elements
@@ -149,31 +149,31 @@ let camLookAtSpan = document.querySelector("#lookingAt");
 
 // All resources loaded
 manager.onLoad = function () {
-  // Fade out
-  loaderDiv.classList.add("hidden");
+    // Fade out
+    loaderDiv.classList.add("hidden");
 };
 
 // After fade, remove from DOM
 loaderDiv.addEventListener("transitionend", () => {
-  if (loaderDiv.classList.contains("hidden")) {
-    loaderDiv.style.display = "none";
-  }
+    if (loaderDiv.classList.contains("hidden")) {
+        loaderDiv.style.display = "none";
+    }
 });
 
 function isMobile() {
-  return window.innerWidth <= 768; // tweak breakpoint as needed
+    return window.innerWidth <= 768; // tweak breakpoint as needed
 }
 
 window.addEventListener("scroll", () => {
-  if (!isMobile()) return;
+    if (!isMobile()) return;
 
-  const maxScroll = document.body.scrollHeight - window.innerHeight;
-  scrollProgress = window.scrollY / maxScroll; // 0 → 1
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    scrollProgress = window.scrollY / maxScroll; // 0 → 1
 });
 
 
 // loader.load('models/physical.glb', function(gltf) {
-loader.load('models/NewRig.glb', function(gltf) {
+loader.load('models/NewRig.glb', function (gltf) {
     mixer = new THREE.AnimationMixer(gltf.scene);
     for (let anim of gltf.animations) {
         let action = mixer.clipAction(anim);
@@ -188,13 +188,13 @@ loader.load('models/NewRig.glb', function(gltf) {
 
     // Material Set
     gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-        child.material.needsUpdate = true;
-        child.castShadow = true;
-        child.receiveShadow = true;
-    }
+        if (child.isMesh) {
+            child.material.needsUpdate = true;
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
     });
-    
+
     scene.add(gltf.scene)
 
     // let animAction = actions['Appear'];
@@ -205,7 +205,7 @@ loader.load('models/NewRig.glb', function(gltf) {
     animAction.play();
 
     scrollObjects.push(manModel);
-}, undefined, function(error) {
+}, undefined, function (error) {
     console.error(error);
 });
 
@@ -213,17 +213,17 @@ loader.load('models/NewRig.glb', function(gltf) {
 // Adding Chair
 var chair;
 
-loader.load('models/chair.glb', function(gltf) {
+loader.load('models/chair.glb', function (gltf) {
     chair = gltf.scene;
     chair.position.z = -15;
     chair.position.y = -7;
     buttonTweenSettings.objects.chair.object = chair.position;
-    scene.add(chair);    
+    scene.add(chair);
 });
 
 // Adding Table
 var table;
-loader.load('models/table.glb', function(gltf) {
+loader.load('models/table.glb', function (gltf) {
     table = gltf.scene;
     table.position.z = 30;
     table.position.y = -7;
@@ -233,7 +233,7 @@ loader.load('models/table.glb', function(gltf) {
 
 // Adding Apple
 var apple;
-loader.load('models/apple.glb', function(gltf) {
+loader.load('models/apple.glb', function (gltf) {
     apple = gltf.scene;
     apple.position.z = 0;
     apple.position.y = 5;
@@ -243,7 +243,7 @@ loader.load('models/apple.glb', function(gltf) {
 
 // Adding Dumbell
 var dumbell;
-loader.load('models/dumbell.glb', function(gltf) {
+loader.load('models/dumbell.glb', function (gltf) {
     dumbell = gltf.scene;
     dumbell.position.z = 0;
     dumbell.position.y = 5;
@@ -253,9 +253,9 @@ loader.load('models/dumbell.glb', function(gltf) {
 
 // Reduce brightness by scaling environment intensity
 scene.traverse((child) => {
-if (child.isMesh && child.material.isMeshStandardMaterial) {
-    child.material.envMapIntensity = 0.1; // scale down reflection strength
-}
+    if (child.isMesh && child.material.isMeshStandardMaterial) {
+        child.material.envMapIntensity = 0.1; // scale down reflection strength
+    }
 });
 
 
@@ -268,89 +268,89 @@ window.addEventListener("resize", () => {
 
 var buttonTweenSettings = {
     home: {
-        model: {position: {x: 0, y: 0, z: 0}},
-        camera: {position: {x: 0, y: 3, z: 12}},
+        model: { position: { x: 0, y: 0, z: 0 } },
+        camera: { position: { x: 0, y: 3, z: 12 } },
         anim: 'Idle',
         loop: true,
     },
     mental: {
-        model: {position: {x: -5, y: 0, z: 0}},
-        camera: {position: {x: -10, y: 0, z: 5}},
+        model: { position: { x: -5, y: 0, z: 0 } },
+        camera: { position: { x: -10, y: 0, z: 5 } },
         anim: 'Sitting',
         miscObjs: ['chair'],
     },
     mentalHealth: {
-        model: {position: {x: -5, y: 0, z: 0}},
-        camera: {position: {x: -10, y: 0, z: 0}},
+        model: { position: { x: -5, y: 0, z: 0 } },
+        camera: { position: { x: -10, y: 0, z: 0 } },
         anim: 'Sitting',
         miscObjs: ['chair']
     },
     learning: {
-        model: {position: {x: -8, y: 0, z: 0}},
-        camera: {position: {x: -12, y: 0, z: 5}},
+        model: { position: { x: -8, y: 0, z: 0 } },
+        camera: { position: { x: -12, y: 0, z: 5 } },
         anim: 'Learn',
         miscObjs: ['table', 'chair']
     },
     physical: {
-        model: {position: {x: 0, y: 2, z: 0}},
-        camera: {position: {x: 0, y: 6, z: 9}},
+        model: { position: { x: 0, y: 2, z: 0 } },
+        camera: { position: { x: 0, y: 6, z: 9 } },
         anim: 'BackDouble'
     },
     fitness: {
-        model: {position: {x: 0, y: 3.6, z: 5.2}},
-        camera: {position: {x: -4.5, y: 5.3, z: 8.8}},
+        model: { position: { x: 0, y: 3.6, z: 5.2 } },
+        camera: { position: { x: -4.5, y: 5.3, z: 8.8 } },
         anim: 'Dumbell',
         miscObjs: ['dumbell']
     },
     nutrition: {
-        model: {position: {x: -6.2, y: 1.3, z: 4.6}},
-        camera: {position: {x: 6.6, y: 4.4, z: 11.7}},
+        model: { position: { x: -6.2, y: 1.3, z: 4.6 } },
+        camera: { position: { x: 6.6, y: 4.4, z: 11.7 } },
         anim: 'Apple',
         miscObjs: ['apple']
     },
     about: {
-        model: {position: {x: 0, y: 0, z: 0}},
-        camera: {position: {x: 0, y: 5, z: 20}},
+        model: { position: { x: 0, y: 0, z: 0 } },
+        camera: { position: { x: 0, y: 5, z: 20 } },
         anim: 'Idle'
     },
     team: {
-        model: {position: {x: 15, y: 0, z: 0}},
-        camera: {position: {x: -7, y: 3, z: 10}},
+        model: { position: { x: 15, y: 0, z: 0 } },
+        camera: { position: { x: -7, y: 3, z: 10 } },
         anim: 'DodgeBackInPlace',
         // miscObjs: ['chair']
     },
     events: {
-        model:  { position: { x: -15, y: 0, z: 0 } },  
-        camera: { position: { x: 7,  y: 3, z: 10 } },
+        model: { position: { x: -15, y: 0, z: 0 } },
+        camera: { position: { x: 7, y: 3, z: 10 } },
         anim: 'Run',
         loop: true,
     },
     sponsorship: {
-        model:  { position: { x: -15, y: 0, z: 0 } },  
-        camera: { position: { x: 7,  y: 3, z: 10 } },
+        model: { position: { x: -15, y: 0, z: 0 } },
+        camera: { position: { x: 7, y: 3, z: 10 } },
         anim: 'SitDownTable',
         miscObjs: ['table', 'chair'],
     },
     objects: {
         chair: {
             object: chair,
-            position: {x: 0, y: -7, z: 0},
-            default: {x: 0, y: -7, z: -15}
+            position: { x: 0, y: -7, z: 0 },
+            default: { x: 0, y: -7, z: -15 }
         },
         table: {
             object: table,
-            position: {x: 0, y: -7, z: 0},
-            default: {x: 0, y: -7, z: 30}
+            position: { x: 0, y: -7, z: 0 },
+            default: { x: 0, y: -7, z: 30 }
         },
         apple: {
             object: apple,
-            position: {x: 0, y: -7, z: 0},
-            default: {x: 0, y: 5, z: 0}
+            position: { x: 0, y: -7, z: 0 },
+            default: { x: 0, y: 5, z: 0 }
         },
         dumbell: {
             object: dumbell,
-            position: {x: 0, y: -7, z: 0},
-            default: {x: 0, y: 5, z: 0}
+            position: { x: 0, y: -7, z: 0 },
+            default: { x: 0, y: 5, z: 0 }
         }
     }
 }
@@ -358,14 +358,14 @@ var buttonTweenSettings = {
 function transition(param) {
     var settings = buttonTweenSettings[param];
     let animAction = actions[settings.anim];
-    if(currentAction != animAction) {
+    if (currentAction != animAction) {
         // if(settings.anim == "DodgeBackInPlace"){
 
         // }
         console.log(settings.anim);
         animAction.reset();
         animAction.clampWhenFinished = true;
-        if(settings.loop){
+        if (settings.loop) {
             animAction.setLoop(THREE.LoopRepeat);
         }
         else {
@@ -375,29 +375,29 @@ function transition(param) {
         currentAction.crossFadeTo(animAction, 0.5, true);
         currentAction = animAction;
     }
-    
-    if(settings.miscObjs) {
-        for(const obj of settings.miscObjs) {
+
+    if (settings.miscObjs) {
+        for (const obj of settings.miscObjs) {
             let item = buttonTweenSettings.objects[obj];
             group.add(new Tween(item.object).to(item.position, 500).easing(Easing.Quadratic.Out).start());
         };
 
-        for(const obj in buttonTweenSettings.objects){
-            if(!settings.miscObjs.includes(obj)) {
+        for (const obj in buttonTweenSettings.objects) {
+            if (!settings.miscObjs.includes(obj)) {
                 let item = buttonTweenSettings.objects[obj];
                 group.add(new Tween(item.object).to(item.default, 500).easing(Easing.Quadratic.In).start());
             }
         }
     }
     else {
-        for(const obj in buttonTweenSettings.objects){
+        for (const obj in buttonTweenSettings.objects) {
             let item = buttonTweenSettings.objects[obj];
             group.add(new Tween(item.object).to(item.default, 500).easing(Easing.Quadratic.In).start());
         }
     }
 
     const camManTween = new Tween(camera.position).to(settings.camera.position, 500).easing(Easing.Quadratic.InOut).start();
-    const controlTween = new Tween(controls.target).to(settings.model.position, 500).easing(Easing.Quadratic.InOut).onUpdate((pos) => {controls.target.set(pos.x, pos.y, pos.z);}).start();
+    const controlTween = new Tween(controls.target).to(settings.model.position, 500).easing(Easing.Quadratic.InOut).onUpdate((pos) => { controls.target.set(pos.x, pos.y, pos.z); }).start();
 
     group.add(controlTween);
     group.add(camManTween);
@@ -424,19 +424,19 @@ function animate() {
         const targetZ = 12 + scrollProgress * 15; // from z=20 to z=35
         camera.position.z += (targetZ - camera.position.z) * 0.1; // lerp smoothing
     }
-    
-      // 5. calculate and display the vector values on screen
+
+    // 5. calculate and display the vector values on screen
     // this copies the camera's unit vector direction to cameraDirection
     camera.getWorldDirection(cameraDirection)
     // scale the unit vector up to get a more intuitive value
     cameraDirection.set(cameraDirection.x * 100, cameraDirection.y * 100, cameraDirection.z * 100)
     // update the onscreen spans with the camera's position and lookAt vectors
     camPositionSpan.innerHTML = `Position: (${camera.position.x.toFixed(1)}, ${camera.position.y.toFixed(1)}, ${camera.position.z.toFixed(1)})`;
-    camLookAtSpan.innerHTML = `LookAt: (${(camera.position.x + cameraDirection.x).toFixed(1)}, ${(camera.position.y + cameraDirection.y).toFixed(1)}, ${(camera.position.z + cameraDirection.z).toFixed(1)})`;  
-    if(useFly){
+    camLookAtSpan.innerHTML = `LookAt: (${(camera.position.x + cameraDirection.x).toFixed(1)}, ${(camera.position.y + cameraDirection.y).toFixed(1)}, ${(camera.position.z + cameraDirection.z).toFixed(1)})`;
+    if (useFly) {
         Flycontrols.update(0.01);
     }
-    else{
+    else {
         controls.update();
     }
     renderer.render(scene, camera);
