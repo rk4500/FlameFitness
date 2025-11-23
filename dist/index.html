@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLAME Fitness</title>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-    </style>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-    </style>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-  <script type="module" crossorigin src="/FlameFitness/assets/index-BWu30cPz.js"></script>
-  <link rel="stylesheet" crossorigin href="/FlameFitness/assets/index-D2OKbgzq.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLAME Fitness</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+  </style>
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <script type="module" crossorigin src="/FlameFitness/assets/index-Bm1gutrh.js"></script>
+  <link rel="stylesheet" crossorigin href="/FlameFitness/assets/index-CpD3_Z7X.css">
 </head>
-<body>
+
+<body class="font-['Montserrat'] text-white">
   <!-- Loader -->
-  <div id="loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black transition-opacity duration-500">
+  <div id="loader"
+    class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black transition-opacity duration-500">
     <img src="/FlameFitness/assets/dumbbell-C95oemKB.png" alt="Loading..." class="loader-icon w-16 h-16 mb-4" />
     <p id="loading-text" class="text-white text-base">Loading...</p>
   </div>
 
   <!-- Three.js Background -->
-  <canvas id="bg"></canvas> 
+  <canvas id="bg" class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-auto"></canvas>
 
-  <nav class="fixed top-0 left-1/2 -translate-x-1/2 w-11/12 md:w-4/5 flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
+  <nav
+    class="fixed top-0 left-1/2 -translate-x-1/2 w-11/12 md:w-4/5 flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
     <!-- Left: Logo + Name -->
     <div class="flex items-center flex-1">
       <a href="home" class="flex items-center space-x-3">
-        <img src="img/logo.jpg" alt="Logo" class="w-12 h-12 rounded" />
-        <span class="text-xl md:text-2xl font-bold tracking-wide hover:text-orange-500 transition-colors">FLAMEFITNESS</span>
+        <img src="img/logo.jpg" alt="Logo" class="w-12 h-12 rounded-[5px]" />
+        <span
+          class="text-xl md:text-2xl font-bold tracking-wide hover:text-orange-500 transition-colors">FLAMEFITNESS</span>
       </a>
     </div>
 
     <!-- Center: Links -->
     <div class="hidden md:flex flex-1 justify-center space-x-8">
       <a href="team" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Our Team</a>
-      <a href="sponsorship" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Sponsorships</a>
+      <a href="sponsorship"
+        class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Sponsorships</a>
       <a href="events" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Events</a>
     </div>
 
@@ -53,7 +59,7 @@
     </button>
   </nav>
 
-  <div id="camera-vectors">
+  <div id="camera-vectors" class="absolute top-0 right-0 bg-gray-500 p-2 text-white">
     <span>Free Camera Vectors:</span><br>
     <span id="position"></span><br>
     <span id="lookingAt"></span>
@@ -61,15 +67,20 @@
 
 
   <!-- Main Content (wrapped if you want animations) -->
-  <div id="content" class="flex ">
-    <div id="page-content" class="fade-in">
-      <div class="title flex">
-        <h1>Welcome to The FLAME Fitness Club</h1>
+  <div id="content"
+    class="relative z-10 text-center p-5 pt-20 overflow-scroll w-screen h-screen flex justify-center text-white">
+    <div id="page-content" class="fade-in h-full w-[1400px] flex flex-col justify-start items-center">
+      <div class="title flex flex-col h-auto w-[80%]">
+        <h1 class="text-[22px]">Welcome to The FLAME Fitness Club</h1>
         <p>Click the buttons to learn more!</p>
       </div>
-      <div class="main-options flex">
-        <div class="option"><a href="team" id='mental'>Our Team</a></div>
-        <div class="option"><a href="events" id="physical">Events</a></div>
+      <div class="main-options flex h-[80%] w-full justify-between items-center px-[25px]">
+        <div class="option"><a href="team" id='mental'
+            class="border border-white rounded-[15px] text-[30px] font-medium px-[20px] py-[2px] bg-gray-500/20">Our
+            Team</a></div>
+        <div class="option"><a href="events" id="physical"
+            class="border border-white rounded-[15px] text-[30px] font-medium px-[20px] py-[2px] bg-gray-500/20">Events</a>
+        </div>
       </div>
     </div>
   </div>

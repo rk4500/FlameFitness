@@ -4,6 +4,7 @@ import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Group, Easing, Tween } from '@tweenjs/tween.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 
 
 
@@ -124,6 +125,8 @@ var skeleton;
 var mixer;
 var actions = {};
 var currentAction;
+var teamClones = [];
+var teamMixers = [];
 
 // Define how far everything should travel
 const zStart = 0;     // starting Z
@@ -314,10 +317,9 @@ var buttonTweenSettings = {
         anim: 'Idle'
     },
     team: {
-        model: { position: { x: 15, y: 0, z: 0 } },
-        camera: { position: { x: -7, y: 3, z: 10 } },
-        anim: 'DodgeBackInPlace',
-        // miscObjs: ['chair']
+        model: { position: { x: 13, y: 0, z: 0 } },
+        camera: { position: { x: -7, y: 3, z: 13 } },
+        anim: 'Idle',
     },
     events: {
         model: { position: { x: -15, y: 0, z: 0 } },
@@ -401,6 +403,95 @@ function transition(param) {
 
     group.add(controlTween);
     group.add(camManTween);
+
+    if (param === 'team' && teamClones.length === 0 && manModel) {
+        // Spawn 2 clones with arc configuration
+        const clonesConfig = [
+            { xOffset: -3.5, zOffset: +1.5, rotateY: 0.3 }, // Left
+            { xOffset: 3.5, zOffset: +1.5, rotateY: -0.5 }  // Right
+        ];
+
+        clonesConfig.forEach((config) => {
+            const clone = SkeletonUtils.clone(manModel);
+            clone.position.copy(manModel.position);
+            clone.rotation.copy(manModel.rotation);
+            clone.scale.copy(manModel.scale);
+
+            // Create mixer
+            const mixer = new THREE.AnimationMixer(clone);
+
+            // Play Idle
+            const idleAction = actions['Idle'];
+            if (idleAction) {
+                const clip = idleAction.getClip();
+                const action = mixer.clipAction(clip);
+                action.play();
+            }
+
+            scene.add(clone);
+
+            // Clone materials for independent fading
+            clone.traverse((child) => {
+                if (child.isMesh) {
+                    child.material = child.material.clone();
+                    child.material.transparent = true;
+                    child.material.opacity = 1;
+                }
+            });
+
+            teamClones.push(clone);
+            teamMixers.push(mixer);
+
+            // Tween Position (Arc)
+            const targetPos = {
+                x: manModel.position.x + config.xOffset,
+                y: manModel.position.y,
+                z: manModel.position.z + config.zOffset
+            };
+
+            group.add(new Tween(clone.position)
+                .to(targetPos, 1000)
+                .easing(Easing.Quadratic.Out)
+                .start());
+
+            // Tween Rotation (Face Center)
+            const targetRot = { y: manModel.rotation.y + config.rotateY };
+            group.add(new Tween(clone.rotation)
+                .to(targetRot, 1000)
+                .easing(Easing.Quadratic.Out)
+                .start());
+        });
+
+    } else if (param !== 'team' && teamClones.length > 0) {
+        // Cleanup all clones
+        const clonesToRemove = [...teamClones];
+        teamClones = []; // Clear global array immediately
+        teamMixers = [];
+
+        clonesToRemove.forEach((clone) => {
+            let opacity = { value: 1 };
+            group.add(new Tween(opacity)
+                .to({ value: 0 }, 500)
+                .easing(Easing.Quadratic.Out)
+                .onUpdate(() => {
+                    clone.traverse((child) => {
+                        if (child.isMesh) {
+                            child.material.opacity = opacity.value;
+                        }
+                    });
+                })
+                .onComplete(() => {
+                    scene.remove(clone);
+                    clone.traverse((child) => {
+                        if (child.isMesh) {
+                            child.geometry.dispose();
+                            child.material.dispose();
+                        }
+                    });
+                })
+                .start());
+        });
+    }
 }
 
 window.transition = transition;
@@ -408,7 +499,15 @@ window.transition = transition;
 animate();
 function animate() {
     requestAnimationFrame(animate);
-    if (mixer) mixer.update(clock.getDelta());
+
+    const delta = clock.getDelta();
+
+    if (mixer) mixer.update(delta);
+
+    if (teamMixers.length > 0) {
+        teamMixers.forEach(m => m.update(delta));
+    }
+
     group.update();
 
     // Scroll fade for mobile
