@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAME Fitness</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+    </style>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+    </style>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <script type="module" crossorigin src="/FlameFitness/assets/index-7SO9sWHG.js"></script>
+  <link rel="stylesheet" crossorigin href="/FlameFitness/assets/index-D2OKbgzq.css">
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black transition-opacity duration-500">
+    <img src="/FlameFitness/assets/dumbbell-C95oemKB.png" alt="Loading..." class="loader-icon w-16 h-16 mb-4" />
+    <p id="loading-text" class="text-white text-base">Loading...</p>
+  </div>
+
+  <!-- Three.js Background -->
+  <canvas id="bg"></canvas> 
+
+  <nav class="fixed top-0 left-1/2 -translate-x-1/2 w-11/12 md:w-4/5 flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
+    <!-- Left: Logo + Name -->
+    <div class="flex items-center flex-1">
+      <a href="home" class="flex items-center space-x-3">
+        <img src="img/logo.jpg" alt="Logo" class="w-12 h-12 rounded" />
+        <span class="text-xl md:text-2xl font-bold tracking-wide hover:text-orange-500 transition-colors">FLAMEFITNESS</span>
+      </a>
+    </div>
+
+    <!-- Center: Links -->
+    <div class="hidden md:flex flex-1 justify-center space-x-8">
+      <a href="team" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Our Team</a>
+      <a href="sponsorship" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Sponsorships</a>
+      <a href="events" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">Events</a>
+    </div>
+
+    <!-- Right Link -->
+    <div class="hidden md:flex flex-1 justify-end">
+      <a href="about" class="text-lg md:text-xl font-medium hover:text-orange-500 transition-colors">About</a>
+    </div>
+
+    <!-- Mobile Hamburger -->
+    <button id="menu-toggle" class="md:hidden flex flex-col space-y-1">
+      <span class="block w-6 h-0.5 bg-white"></span>
+      <span class="block w-6 h-0.5 bg-white"></span>
+      <span class="block w-6 h-0.5 bg-white"></span>
+    </button>
+  </nav>
+
+  <div id="camera-vectors">
+    <span>Free Camera Vectors:</span><br>
+    <span id="position"></span><br>
+    <span id="lookingAt"></span>
+  </div>
+
+
+  <!-- Main Content (wrapped if you want animations) -->
+  <div id="content" class="flex ">
+    <div id="page-content" class="fade-in">
+      <div class="title flex">
+        <h1>Welcome to The FLAME Fitness Club</h1>
+        <p>Click the buttons to learn more!</p>
+      </div>
+      <div class="main-options flex">
+        <div class="option"><a href="team" id='mental'>Our Team</a></div>
+        <div class="option"><a href="events" id="physical">Events</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="main.js"></script>
+</body>

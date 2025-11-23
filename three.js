@@ -3,11 +3,14 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Group, Easing, Tween } from '@tweenjs/tween.js'
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { text } from 'framer-motion/client';
+
 
 // Initialize Three.js Scene
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog('#000000', 15, 18); // #232323
-scene.background = new THREE.Color('#000000');
+// scene.background = new THREE.Color('#000000');
 
 // // XY plane (default GridHelper)
 // const gridXY = new THREE.GridHelper(50, 50, 0x888888, 0x444444);
@@ -27,6 +30,17 @@ scene.background = new THREE.Color('#000000');
 // const axesHelper = new THREE.AxesHelper(10);
 // scene.add(axesHelper);
 
+// Environment Setup
+const rgbeLoader = new RGBELoader();
+rgbeLoader.load('envs/qwantani_dusk_2_puresky_1k.hdr', (texture) => {
+  texture.magFilter = THREE.LinearFilter;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  scene.environment = texture;
+  scene.background = new THREE.Color(0x000000); // keep black bg
+});
+
 
 // Camera setup
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -37,6 +51,13 @@ camera.position.y = 7;
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("bg"), alpha: false });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
+
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.15;  // try between 0.4 – 1.0
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
 
 // Orbit control Setup
 const controls = new OrbitControls( camera, renderer.domElement );
@@ -70,14 +91,32 @@ controls.enableRotate = false;
 var clock = new THREE.Clock();
 
 // Adding Light
-const directionalLight = new THREE.DirectionalLight(0xffffff);
-directionalLight.position.z = 1;
-directionalLight.position.y = 3;
-const backDirectionalLight = new THREE.DirectionalLight(0xffffff);
-backDirectionalLight.position.z = -1;
-backDirectionalLight.position.y = 3;
-scene.add(directionalLight);
-scene.add(backDirectionalLight)
+const keyLight = new THREE.DirectionalLight(0xffffff, 2);
+keyLight.position.set(5, 10, 7);
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+fillLight.position.set(-5, 5, -5);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+rimLight.position.set(0, 5, -10);
+scene.add(rimLight);
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambient);
+
+// const directionalLight = new THREE.DirectionalLight(0x404040, 30);
+// directionalLight.position.z = 1;
+// directionalLight.position.y = 3;
+// const backDirectionalLight = new THREE.DirectionalLight(0x404040, 30);
+// backDirectionalLight.position.z = -1;
+// backDirectionalLight.position.y = 3;
+// scene.add(directionalLight);
+// scene.add(backDirectionalLight)
+// const light = new THREE.AmbientLight(0x404040, 5); // soft white light
+// scene.add( light );
+
 
 // Adding Man
 var manModel;
@@ -133,7 +172,8 @@ window.addEventListener("scroll", () => {
 });
 
 
-loader.load('models/physical.glb', function(gltf) {
+// loader.load('models/physical.glb', function(gltf) {
+loader.load('models/NewRig.glb', function(gltf) {
     mixer = new THREE.AnimationMixer(gltf.scene);
     for (let anim of gltf.animations) {
         let action = mixer.clipAction(anim);
@@ -142,12 +182,26 @@ loader.load('models/physical.glb', function(gltf) {
 
     manModel = gltf.scene;
     gltf.scene.position.y = -7;
+
+    // Access the scene and set its scale
+    gltf.scene.scale.set(6, 6, 6);
+
+    // Material Set
+    gltf.scene.traverse((child) => {
+    if (child.isMesh) {
+        child.material.needsUpdate = true;
+        child.castShadow = true;
+        child.receiveShadow = true;
+    }
+    });
+    
     scene.add(gltf.scene)
 
-    let animAction = actions['Appear'];
+    // let animAction = actions['Appear'];
+    let animAction = actions['Idle'];
     currentAction = animAction
     animAction.clampWhenFinished = true;
-    animAction.setLoop(THREE.LoopOnce);
+    animAction.setLoop(THREE.LoopRepeat);
     animAction.play();
 
     scrollObjects.push(manModel);
@@ -164,9 +218,7 @@ loader.load('models/chair.glb', function(gltf) {
     chair.position.z = -15;
     chair.position.y = -7;
     buttonTweenSettings.objects.chair.object = chair.position;
-    scene.add(chair);
-
-    
+    scene.add(chair);    
 });
 
 // Adding Table
@@ -199,6 +251,14 @@ loader.load('models/dumbell.glb', function(gltf) {
     scene.add(gltf.scene);
 });
 
+// Reduce brightness by scaling environment intensity
+scene.traverse((child) => {
+if (child.isMesh && child.material.isMeshStandardMaterial) {
+    child.material.envMapIntensity = 0.1; // scale down reflection strength
+}
+});
+
+
 // Handle Window Resize
 window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -209,8 +269,9 @@ window.addEventListener("resize", () => {
 var buttonTweenSettings = {
     home: {
         model: {position: {x: 0, y: 0, z: 0}},
-        camera: {position: {x: 0, y: 0, z: 13}},
-        anim: 'Appear'
+        camera: {position: {x: 0, y: 3, z: 12}},
+        anim: 'Idle',
+        loop: true,
     },
     mental: {
         model: {position: {x: -5, y: 0, z: 0}},
@@ -250,18 +311,25 @@ var buttonTweenSettings = {
     about: {
         model: {position: {x: 0, y: 0, z: 0}},
         camera: {position: {x: 0, y: 5, z: 20}},
-        anim: 'Appear'
+        anim: 'Idle'
     },
     team: {
         model: {position: {x: 15, y: 0, z: 0}},
         camera: {position: {x: -7, y: 3, z: 10}},
-        anim: 'Appear',
+        anim: 'DodgeBackInPlace',
         // miscObjs: ['chair']
     },
     events: {
         model:  { position: { x: -15, y: 0, z: 0 } },  
         camera: { position: { x: 7,  y: 3, z: 10 } },
-        anim: 'Appear',
+        anim: 'Run',
+        loop: true,
+    },
+    sponsorship: {
+        model:  { position: { x: -15, y: 0, z: 0 } },  
+        camera: { position: { x: 7,  y: 3, z: 10 } },
+        anim: 'SitDownTable',
+        miscObjs: ['table', 'chair'],
     },
     objects: {
         chair: {
@@ -291,9 +359,18 @@ function transition(param) {
     var settings = buttonTweenSettings[param];
     let animAction = actions[settings.anim];
     if(currentAction != animAction) {
+        // if(settings.anim == "DodgeBackInPlace"){
+
+        // }
+        console.log(settings.anim);
         animAction.reset();
         animAction.clampWhenFinished = true;
-        animAction.setLoop(THREE.LoopOnce);
+        if(settings.loop){
+            animAction.setLoop(THREE.LoopRepeat);
+        }
+        else {
+            animAction.setLoop(THREE.LoopOnce);
+        }
         animAction.play();
         currentAction.crossFadeTo(animAction, 0.5, true);
         currentAction = animAction;
