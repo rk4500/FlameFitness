@@ -26,7 +26,8 @@
   <!-- Three.js Background -->
   <canvas id="bg" class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-auto"></canvas>
 
-  <nav class="fixed top-0 left-1/2 -translate-x-1/2 w-[1400px] flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
+  <nav
+    class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
     <!-- Left: Logo + Name -->
     <div class="flex items-center flex-1">
       <a href="home" class="group flex items-center space-x-3">
@@ -50,11 +51,22 @@
     </div>
 
     <!-- Mobile Hamburger -->
-    <button id="menu-toggle" class="md:hidden flex flex-col space-y-1">
-      <span class="block w-6 h-0.5 bg-white"></span>
-      <span class="block w-6 h-0.5 bg-white"></span>
-      <span class="block w-6 h-0.5 bg-white"></span>
+    <button id="menu-toggle" class="md:hidden flex flex-col space-y-1 z-50 relative">
+      <span class="block w-6 h-0.5 bg-white transition-transform duration-300"></span>
+      <span class="block w-6 h-0.5 bg-white transition-opacity duration-300"></span>
+      <span class="block w-6 h-0.5 bg-white transition-transform duration-300"></span>
     </button>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+      class="fixed inset-0 bg-black/95 z-40 flex flex-col items-center justify-center space-y-8 opacity-0 pointer-events-none transition-opacity duration-300">
+      <a href="home" class="mobile-link text-2xl font-bold hover:text-orange-500 transition-colors">Home</a>
+      <a href="team" class="mobile-link text-2xl font-bold hover:text-orange-500 transition-colors">Our Team</a>
+      <a href="sponsorship"
+        class="mobile-link text-2xl font-bold hover:text-orange-500 transition-colors">Sponsorships</a>
+      <a href="events" class="mobile-link text-2xl font-bold hover:text-orange-500 transition-colors">Events</a>
+      <a href="about" class="mobile-link text-2xl font-bold hover:text-orange-500 transition-colors">About</a>
+    </div>
   </nav>
 
   <div id="camera-vectors" class="absolute top-0 right-0 bg-gray-500 p-2 text-white">

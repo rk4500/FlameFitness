@@ -164,7 +164,7 @@ loaderDiv.addEventListener("transitionend", () => {
 });
 
 function isMobile() {
-    return window.innerWidth <= 768; // tweak breakpoint as needed
+    return window.innerWidth <= 1024; // Updated to include tablets
 }
 
 window.addEventListener("scroll", () => {
@@ -267,7 +267,32 @@ window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+
+    // Re-run transition logic to update visibility based on new screen size
+    // We pass the currentAction name. We need to store it properly.
+    // In main.js 'currentAction' is the page name. In three.js we rely on 'transition' param.
+    // We can infer the current state from the last called transition or just re-trigger it if we had state.
+    // For now, let's just ensure if we switch to desktop, things become visible.
+    if (!isMobile()) {
+        if (manModel) manModel.visible = true;
+        if (chair) chair.visible = true;
+        if (table) table.visible = true;
+        if (apple) apple.visible = true;
+        if (dumbell) dumbell.visible = true;
+        teamClones.forEach(clone => clone.visible = true);
+    } else {
+        if (lastTransitionParam !== 'home') {
+            if (manModel) manModel.visible = false;
+            if (chair) chair.visible = false;
+            if (table) table.visible = false;
+            if (apple) apple.visible = false;
+            if (dumbell) dumbell.visible = false;
+            teamClones.forEach(clone => clone.visible = false);
+        }
+    }
 });
+
+let lastTransitionParam = 'home'; // Default
 
 var buttonTweenSettings = {
     home: {
@@ -358,6 +383,7 @@ var buttonTweenSettings = {
 }
 
 function transition(param) {
+    lastTransitionParam = param;
     var settings = buttonTweenSettings[param];
     let animAction = actions[settings.anim];
     if (currentAction != animAction) {
@@ -492,6 +518,36 @@ function transition(param) {
                 .start());
         });
     }
+
+    // Mobile Visibility Logic
+    if (isMobile()) {
+        if (param !== 'home') {
+            // Hide model and props on mobile for non-home pages
+            if (manModel) manModel.visible = false;
+            if (chair) chair.visible = false;
+            if (table) table.visible = false;
+            if (apple) apple.visible = false;
+            if (dumbell) dumbell.visible = false;
+            // Also hide team clones if any (though they should be cleaned up by logic above)
+            teamClones.forEach(clone => clone.visible = false);
+        } else {
+            // Show model on home
+            if (manModel) manModel.visible = true;
+            // Props are hidden by default position usually, but ensure visibility is true so they can appear if needed
+            if (chair) chair.visible = true;
+            if (table) table.visible = true;
+            if (apple) apple.visible = true;
+            if (dumbell) dumbell.visible = true;
+        }
+    } else {
+        // Desktop/Tablet: Ensure everything is visible
+        if (manModel) manModel.visible = true;
+        if (chair) chair.visible = true;
+        if (table) table.visible = true;
+        if (apple) apple.visible = true;
+        if (dumbell) dumbell.visible = true;
+        teamClones.forEach(clone => clone.visible = true);
+    }
 }
 
 window.transition = transition;
@@ -519,7 +575,7 @@ function animate() {
     // }
 
 
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 1024) {
         const targetZ = 12 + scrollProgress * 15; // from z=20 to z=35
         camera.position.z += (targetZ - camera.position.z) * 0.1; // lerp smoothing
     }
