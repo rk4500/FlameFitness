@@ -51,8 +51,8 @@ window.addEventListener("click", (event) => {
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
     if (mobileMenu && !mobileMenu.classList.contains('pointer-events-none')) {
-      mobileMenu.classList.add('opacity-0', 'pointer-events-none');
-      mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+      mobileMenu.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+      mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
       // Reset hamburger icon (simplified)
       const spans = menuToggle.querySelectorAll('span');
       spans[0].classList.remove('rotate-45', 'translate-y-1.5');
@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (isOpen) {
         // Close
-        mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
-        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+        mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        mobileMenu.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
 
         // Icon animation reset
         spans[0].classList.remove('rotate-45', 'translate-y-1.5');
@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         spans[2].classList.remove('-rotate-45', '-translate-y-1.5');
       } else {
         // Open
-        mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
-        mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+        mobileMenu.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+        mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
 
         // Icon animation
         spans[0].classList.add('rotate-45', 'translate-y-1.5');

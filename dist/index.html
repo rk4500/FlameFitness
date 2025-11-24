@@ -12,8 +12,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
   </style>
   <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-  <script type="module" crossorigin src="/FlameFitness/assets/index-Bm1gutrh.js"></script>
-  <link rel="stylesheet" crossorigin href="/FlameFitness/assets/index-CpD3_Z7X.css">
+  <script type="module" crossorigin src="/FlameFitness/assets/index-FAvkpdHb.js"></script>
+  <link rel="stylesheet" crossorigin href="/FlameFitness/assets/index-DMGWNPeQ.css">
 </head>
 
 <body class="font-['Montserrat'] text-white">
@@ -28,13 +28,13 @@
   <canvas id="bg" class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-auto"></canvas>
 
   <nav
-    class="fixed top-0 left-1/2 -translate-x-1/2 w-11/12 md:w-4/5 flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
+    class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] flex items-center px-6 py-4 bg-black/60 z-50 rounded-xl">
     <!-- Left: Logo + Name -->
     <div class="flex items-center flex-1">
-      <a href="home" class="flex items-center space-x-3">
+      <a href="home" class="group flex items-center space-x-3">
         <img src="img/logo.jpg" alt="Logo" class="w-12 h-12 rounded-[5px]" />
         <span
-          class="text-xl md:text-2xl font-bold tracking-wide hover:text-orange-500 transition-colors">FLAMEFITNESS</span>
+          class="text-xl md:text-2xl font-bold tracking-wide group-hover:text-orange-500 transition-colors">FLAMEFITNESS</span>
       </a>
     </div>
 
@@ -52,11 +52,26 @@
     </div>
 
     <!-- Mobile Hamburger -->
-    <button id="menu-toggle" class="md:hidden flex flex-col space-y-1">
-      <span class="block w-6 h-0.5 bg-white"></span>
-      <span class="block w-6 h-0.5 bg-white"></span>
-      <span class="block w-6 h-0.5 bg-white"></span>
+    <button id="menu-toggle" class="md:hidden flex flex-col space-y-1 z-50 relative">
+      <span class="block w-6 h-0.5 bg-white transition-transform duration-300"></span>
+      <span class="block w-6 h-0.5 bg-white transition-opacity duration-300"></span>
+      <span class="block w-6 h-0.5 bg-white transition-transform duration-300"></span>
     </button>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+      class="fixed top-20 right-6 w-64 bg-black/90 border border-white/10 rounded-xl z-40 flex flex-col items-start p-6 space-y-4 opacity-0 pointer-events-none translate-y-[-20px] transition-all duration-300 shadow-2xl backdrop-blur-md">
+      <a href="home"
+        class="mobile-link text-xl font-bold hover:text-orange-500 transition-colors w-full text-left">Home</a>
+      <a href="team" class="mobile-link text-xl font-bold hover:text-orange-500 transition-colors w-full text-left">Our
+        Team</a>
+      <a href="sponsorship"
+        class="mobile-link text-xl font-bold hover:text-orange-500 transition-colors w-full text-left">Sponsorships</a>
+      <a href="events"
+        class="mobile-link text-xl font-bold hover:text-orange-500 transition-colors w-full text-left">Events</a>
+      <a href="about"
+        class="mobile-link text-xl font-bold hover:text-orange-500 transition-colors w-full text-left">About</a>
+    </div>
   </nav>
 
   <div id="camera-vectors" class="absolute top-0 right-0 bg-gray-500 p-2 text-white">
